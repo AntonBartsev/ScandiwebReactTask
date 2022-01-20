@@ -1,25 +1,56 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import Shop from './Pages/Shop';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  HttpLink,
+  from,
+} from "@apollo/client";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { onError } from '@apollo/client/link/error'
+import styled from 'styled-components';
+
+
+const errorLink = onError(({ graphqlErrors }) => {
+  if (graphqlErrors) {
+    graphqlErrors.map(({ message }) => {
+      alert(`Graphql error ${message}`)
+    })
+  }
+})
+
+
+const link = from([
+  errorLink,
+  new HttpLink({
+    uri: "http://localhost:4000/"
+  })
+])
+
+
+export const client = new ApolloClient({
+  link: link,
+  cache: new InMemoryCache()
+});
+
+export const Container = styled.div`
+    width: 1440px;
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+`
+class App extends Component {
+  render() {
+    return (
+      <ApolloProvider client={client}>
+        <Container>
+          <Shop />
+        </Container>
+      </ApolloProvider>
+
+    );
+  }
 }
 
 export default App;
