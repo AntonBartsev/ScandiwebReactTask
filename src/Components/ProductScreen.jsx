@@ -1,137 +1,13 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
-
-const Container = styled.div`
-display: flex;
-justify-content: space-between;
-align-items: center;
-max-width: 100%;
-`
-
-
-const AddToCart = styled.div`
-background: rgba(94, 206, 123, 1);
-text-align: center;
-height: 52px;
-width: 292px;
-left: 929px;
-top: 478px;
-border-radius: 0px;
-padding: 16px, 32px, 16px, 32px;
-font-family: Raleway;
-font-size: 16px;
-font-style: normal;
-font-weight: 600;
-line-height: 19px;
-letter-spacing: 0em;
-cursor: pointer;
-`
-
-const Imgs = styled.div`
-display: flex;
-flex-direction: column;
-padding: 20px 20px 20px 20px;
-justify-content: space-between;
-width: 20%;
-height: 50px;
-object-fit: cover;
-cursor: pointer;
-`
-const MainImg = styled.img`
-
-`
-
-const Sizes = styled.div`
-display: flex;
-justify-content: space-between;
-align-items: center
-`
-const Size = styled.button`
-width: 63px;
-height: 45px;
-background-color: white;
-border: 1px solid #333;
-font-family: Source Sans Pro;
-font-size: 16px;
-font-style: normal;
-font-weight: 400;
-line-height: 18px;
-letter-spacing: 0.05em;
-text-align: center;
-padding: 20px 20px 20px 20px;
-cursor: pointer
-`
-const Brand = styled.p`
-font-family: Raleway;
-font-size: 30px;
-font-style: normal;
-font-weight: 600;
-line-height: 27px;
-letter-spacing: 0em;
-text-align: left;
-padding: 20px 20px 20px 20px;
-`
-const Name = styled.p`
-font-family: Raleway;
-font-size: 30px;
-font-style: normal;
-font-weight: 400;
-line-height: 27px;
-letter-spacing: 0em;
-text-align: left;
-padding: 20px 20px 20px 20px;
-`
-
-const SubName = styled.p`
-font-family: Roboto Condensed;
-font-size: 18px;
-font-style: normal;
-font-weight: 700;
-line-height: 18px;
-letter-spacing: 0em;
-text-align: center;
-padding: 20px 20px 20px 20px;
-`
-
-const Price = styled.div`
-font-family: Raleway;
-font-size: 24px;
-font-style: normal;
-font-weight: 700;
-line-height: 18px;
-letter-spacing: 0em;
-text-align: left;
-padding: 20px 20px 20px 20px;
-`
-
-const OrderContainer = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
-`
-
+import {Container, AddToCart,Imgs, MainImg, Specs, Spec, Brand, Name, SubName, Price, OrderContainer } from '../Style/ProductScreen'
 
 export default class ProductScreen extends Component {
     state = {
-        chosenSize: '',
+        chosenSpecs: new Set(),
         chosenImage: 0
     }
 
 
-    displaySizes = () => {
-        const attributes = this.props.productInfo.attributes
-        if (attributes.length > 0) {
-            return <Sizes>
-                {attributes[0].items.map(item =>
-                    <Size
-                        onClick={() => this.setSize(item.value)}
-                        key={item.value}>
-                        {item.value}
-                    </Size>)}
-            </Sizes >
-        }
-        else return ''
-    }
 
     getDescription = () => {
         let result = []
@@ -144,21 +20,37 @@ export default class ProductScreen extends Component {
         return result
     }
 
-    setSize = (size) => {
+    setSpecs = (spec, specDescr) => {
+        this.state.chosenSpecs.add(`${specDescr}:` + ` ${spec}`)
         this.setState({
-            chosenSize: size
+            chosenSpecs: this.state.chosenSpecs
         })
     }
 
     setProductParams = (brand, name, price, img) => {
-        const cartContent = {
-            size: this.state.chosenSize,
+        const itemsInCart = this.props.cartContent
+        const cartItem = {
+            itemCounter: 1,
+            specs: this.state.chosenSpecs,
             brand: brand,
             name: name,
             price: price,
             img: img
         }
-        this.props.setCartContent(cartContent)
+        
+        let index = null
+        if (itemsInCart.length > 0) {
+            for (let i = 0; i < itemsInCart.length; i++) {
+                if (itemsInCart[i].name === name && itemsInCart[i].specs === this.state.chosenSpecs) {
+                    index = i
+                    break
+                }
+            }
+           index === null ? this.props.setCartContent(cartItem, null) : this.props.setCartContent(cartItem, index)
+            
+        } else {
+            this.props.setCartContent(cartItem, null)
+        }
     }
 
     displayChosenImage = (img) => {
@@ -170,8 +62,9 @@ export default class ProductScreen extends Component {
 
 
     render() {
-        const { gallery, brand, name, attributes } = this.props.productInfo
+        const { gallery, brand, name, attributes, inStock } = this.props.productInfo
         const description = this.getDescription()
+    //    attributes.map(attr => attr.items.map(item => console.log(item.displayValue))) 
         return (
             <Container>
                 <Imgs>
@@ -183,14 +76,27 @@ export default class ProductScreen extends Component {
                 <OrderContainer>
                     <Brand>{brand}</Brand>
                     <Name>{name}</Name>
-                    {attributes.length > 0 ? <SubName>SIZE:</SubName> : ''}
-                    {this.displaySizes()}
+                    {attributes.length > 0 ? attributes.map(attr => 
+                    <div key={attr.name}>
+                            <SubName>{`${attr.name}:`}</SubName>
+                            
+                            <Specs>
+                                {attr.items.map(item =>  <Spec onClick={()=>this.setSpecs(item.value, attr.name)} key={item.id}>{item.displayValue}</Spec> )}
+                            </Specs >
+                        </div>)
+                        : ''} 
+    
                     <SubName>PRICE:</SubName>
                     <Price>{this.props.price}</Price>
+                    {inStock ? 
                     <AddToCart
-                        onClick={() => this.setProductParams(brand, name, this.props.price, gallery)}>
+                        onClick={ () => this.setProductParams(brand, name, this.props.price, gallery)}> 
                         ADD TO CART
                     </AddToCart>
+                        :
+                    <AddToCart>ITEM IS OUT OF STOCK</AddToCart>
+                    }
+                    
                     <div>{description.map(el => `${el.textContent}`)}</div>
                 </OrderContainer>
             </Container>

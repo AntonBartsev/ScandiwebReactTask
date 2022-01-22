@@ -1,40 +1,8 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
 import LeftArrow from '../Images/LeftArrow.svg'
 import RightArrow from '../Images/RightArrow.svg'
+import {CartHeading, BagContainer, ContentPlacement, Img, ArrowsImg, ImgAndArrows } from '../Style/BagStyle'
 
-const CartHeading = styled.h1`
-font-family: Raleway;
-font-size: 32px;
-font-style: normal;
-font-weight: 700;
-line-height: 40px;
-letter-spacing: 0em;
-text-align: left;
-`
-
-const BagContainer = styled.div`
-display: flex;
-flex-direction: column;
-padding: 100px 100px 100px 100px;
-justify-content: space-between
-`
-const ContentPlacement = styled.div`
-display: flex;
-flex-direction: row;
-justify-content: space-between;
-align-items: center
-`
-const Img = styled.img`
-max-height: 185px;
-`
-const ArrowsImg = styled.img`
-position: absolute;
-cursor: pointer;
-`
-const ImgAndArrows = styled.div`
-max-width : 100px
-`
 
 
 
@@ -77,8 +45,9 @@ export default class Bag extends Component {
                             <p>{item.name}</p>
                             <p>{item.price}</p>
                             <p>{item.size}</p>
+                            {Array.from(item.specs).map(spec => <p key={spec}>{spec}</p>)}
                         </div>
-
+                        <p>{item.itemCounter}</p>
                         {item.img.length > 1 ?
                             <ImgAndArrows>
                                 <ArrowsImg onClick={() => this.arrowsOnclick("left", item)} src={LeftArrow} />

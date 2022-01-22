@@ -36,9 +36,11 @@ query{
 product(id: "${id}"){
   id,
   name,
+  inStock,
   gallery,
   description,
   attributes{
+    name,
   	items{
       displayValue,
       value,
