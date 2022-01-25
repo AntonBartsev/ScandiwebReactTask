@@ -1,13 +1,18 @@
-import React, { Component } from 'react'
-import {Container, AddToCart,Imgs, MainImg, Specs, Spec, Brand, Name, SubName, Price, OrderContainer } from '../Style/ProductScreen'
+import React, { Component } from "react";
+import { Container, AddToCart, Imgs, MainImg, Specs, Spec, Brand, Name, SubName, Price, OrderContainer } from "../Style/ProductScreen";
+import styled from "styled-components";
+
+
+
+const ColoredSpec = styled(Spec)`
+background: ${props => props.color};
+` 
+
 
 export default class ProductScreen extends Component {
     state = {
-        chosenSpecs: new Set(),
         chosenImage: 0
     }
-
-
 
     getDescription = () => {
         let result = []
@@ -20,38 +25,7 @@ export default class ProductScreen extends Component {
         return result
     }
 
-    setSpecs = (spec, specDescr) => {
-        this.state.chosenSpecs.add(`${specDescr}:` + ` ${spec}`)
-        this.setState({
-            chosenSpecs: this.state.chosenSpecs
-        })
-    }
 
-    setProductParams = (brand, name, price, img) => {
-        const itemsInCart = this.props.cartContent
-        const cartItem = {
-            itemCounter: 1,
-            specs: this.state.chosenSpecs,
-            brand: brand,
-            name: name,
-            price: price,
-            img: img
-        }
-        
-        let index = null
-        if (itemsInCart.length > 0) {
-            for (let i = 0; i < itemsInCart.length; i++) {
-                if (itemsInCart[i].name === name && itemsInCart[i].specs === this.state.chosenSpecs) {
-                    index = i
-                    break
-                }
-            }
-           index === null ? this.props.setCartContent(cartItem, null) : this.props.setCartContent(cartItem, index)
-            
-        } else {
-            this.props.setCartContent(cartItem, null)
-        }
-    }
 
     displayChosenImage = (img) => {
         const gallery = this.props.productInfo.gallery
@@ -59,18 +33,17 @@ export default class ProductScreen extends Component {
             chosenImage: gallery.indexOf(img)
         })
     }
-
-
+    
     render() {
-        const { gallery, brand, name, attributes, inStock } = this.props.productInfo
+        const priceOfProduct = this.props.setProductPrice(this.props.productInfo, this.props.currency)
+        const { gallery, brand, name, attributes, inStock, id } = this.props.productInfo
         const description = this.getDescription()
-    //    attributes.map(attr => attr.items.map(item => console.log(item.displayValue))) 
         return (
             <Container>
                 <Imgs>
-                    {gallery.map(img =>
+                    {gallery.map((img, index) =>
                         <img onClick={() => this.displayChosenImage(img)}
-                            key={gallery.indexOf(img)} src={img} />)}
+                            key={index} src={img} />)}
                 </Imgs>
                 <MainImg src={gallery[this.state.chosenImage]} />
                 <OrderContainer>
@@ -81,16 +54,22 @@ export default class ProductScreen extends Component {
                             <SubName>{`${attr.name}:`}</SubName>
                             
                             <Specs>
-                                {attr.items.map(item =>  <Spec onClick={()=>this.setSpecs(item.value, attr.name)} key={item.id}>{item.displayValue}</Spec> )}
-                            </Specs >
+                                {attr.items.map(item => item.value[0] === "#"
+                                    ?
+                                    <ColoredSpec color={item.value} onClick={() => this.props.setSpecs(`${attr.name}:`, ` ${item.displayValue}`)} key={item.id} /> 
+                                    :
+                                    <Spec onClick={() => this.props.setSpecs(`${attr.name}:`, ` ${item.value}`)} key={item.id}>
+                                        {item.value}
+                                    </Spec>)}
+                            </Specs>
                         </div>)
                         : ''} 
     
                     <SubName>PRICE:</SubName>
-                    <Price>{this.props.price}</Price>
+                    <Price>{priceOfProduct[0]}</Price>
                     {inStock ? 
                     <AddToCart
-                        onClick={ () => this.setProductParams(brand, name, this.props.price, gallery)}> 
+                        onClick={ () => this.props.setProductParams(brand, name, priceOfProduct[0], gallery, id, priceOfProduct[1])}> 
                         ADD TO CART
                     </AddToCart>
                         :

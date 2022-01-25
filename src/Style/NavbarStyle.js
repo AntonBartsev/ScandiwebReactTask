@@ -1,5 +1,4 @@
-import styled from "styled-components"
-
+import styled from "styled-components";
 
 export const NavbarDiv = styled.div`
     display: grid;
@@ -17,7 +16,7 @@ export const NavbarDiv = styled.div`
     -ms-grid-rows: auto;
     grid-template-rows: auto;
 }
-`
+`;
 
 export const Left = styled.div`
     display: flex;
@@ -34,10 +33,7 @@ export const Left = styled.div`
     -webkit-align-items: center;
     -ms-flex-align: center;
     align-items: center;
-`
-
-
-
+`;
 
 export const Category = styled.span`
     display: -webkit-box;
@@ -57,14 +53,12 @@ export const Category = styled.span`
     text-transform: uppercase;
     cursor: pointer;
 }
-`
-
-
+`;
 
 export const Center = styled.div`
 flex: 1;
 text-align: center;
-`
+`;
 
 export const Right = styled.div`
 display: -webkit-box;
@@ -79,14 +73,16 @@ justify-content: flex-end;
 -webkit-align-items: center;
 -ms-flex-align: center;
 align-items: center;
-`
+`;
+
 export const Image = styled.img`
     border: 0;
     max-width: 100%;
     vertical-align: middle;
     display: inline-block;
     cursor: pointer;
-`
+`;
+
 export const CurrencySign = styled.p`
 font-family: Raleway;
 font-size: 18px;
@@ -96,13 +92,21 @@ line-height: 29px;
 letter-spacing: 0em;
 text-align: left;
 cursor: pointer;
-`
+`;
 
-export const ArrowImg = styled.img`
+export const ArrowImgUp = styled.img`
     width: 8px;
     margin-left: 6px;
     cursor: pointer;
-`
+    transform: rotate(180deg)
+`;
+
+export const ArrowImgDown = styled.img`
+    width: 8px;
+    margin-left: 6px;
+    cursor: pointer;
+`;
+
 export const Currency = styled.div`
     display: -webkit-box;
     display: -webkit-flex;
@@ -116,4 +120,4 @@ export const Currency = styled.div`
     flex-direction: row;
     font-size: 18px;
     text-transform: uppercase;
-`
+`;

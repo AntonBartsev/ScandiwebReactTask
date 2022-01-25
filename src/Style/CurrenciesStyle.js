@@ -1,5 +1,4 @@
-import styled from "styled-components"
-
+import styled from "styled-components";
 
 export const CurrenciesContainer = styled.div`
 display: flex;
@@ -9,7 +8,7 @@ width: 114px;
 height: auto;
 border: 1px solid #333;
 background-color: white;
-`
+`;
 
 export const Currency = styled.p`
 padding: 10px 5px;
@@ -21,4 +20,4 @@ line-height: 29px;
 letter-spacing: 0em;
 text-align: right;
 cursor: pointer;
-`
+`;

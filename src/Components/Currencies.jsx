@@ -1,22 +1,18 @@
-import React, { Component } from 'react'
-import {CurrenciesContainer, Currency} from '../Style/CurrenciesStyle'
-
-
-
+import React, { Component } from "react";
+import { CurrenciesContainer, Currency } from "../Style/CurrenciesStyle";
 
 export default class Currencies extends Component {
-    render() {
+  render () {
     return (
-        <CurrenciesContainer>
-            {this.props.allCurrencies.map(
-                cur => 
-                    <Currency
-                        onClick={() => this.props.setCurrency(cur.symbol)}
-                        key={this.props.allCurrencies.indexOf(cur)}>
-                        {cur.symbol} {cur.label}
-                    </Currency>
-            )}
-            </CurrenciesContainer>
-    )
-    }
+          <CurrenciesContainer>
+              {this.props.allCurrencies.map(
+                (cur, index) => <Currency
+                      onClick={() => this.props.setCurrency(cur.symbol)}
+                      key={index}>
+                      {cur.symbol} {cur.label}
+                  </Currency>
+              )}
+          </CurrenciesContainer>
+    );
+  }
 }
