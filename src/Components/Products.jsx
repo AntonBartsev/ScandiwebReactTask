@@ -1,19 +1,13 @@
 import React, { Component } from "react";
-import { Container, ProductContainer, ProductContainerOutOfStock, Name, Price, Img, TextOutOfStock } from "../Style/ProductsStyle";
+import { Container, ProductContainer, ProductContainerOutOfStock, Name, Price, Img, TextOutOfStock, CartIcon } from "../Style/ProductsStyle";
 import GreenCartIcon from "../Images/GreenCartIcon.svg";
 import { productInfoRequest } from "../GraphQL/Queries";
 import { client } from "../App";
 import { gql } from "@apollo/client";
-// const mediaQuery = window.matchMedia('(max-width: 991px)')
 
-
-// @media screen and (max-width: 991px)
-//justify-content: space-between;
-//flex-wrap: wrap;
-//align-content: space-between
-
+// Main page with products
 export default class Products extends Component {
-
+    // Get products information by product's id
     getProductInfo = (id) => {
         if (id !== "") {
             client.query({ query: gql`${productInfoRequest(id)}` })
@@ -24,25 +18,42 @@ export default class Products extends Component {
             return
     }
     
+    // Set item's specifications when adding to cart from the main page
+    setItemSpecsAndParams = (prod) => {
+        const priceToDisplay = this.props.getProductPriceToDisplay(prod)
+        const priceAmount = this.props.getProductPriceAmount(prod)
+        for (let attribute of prod.attributes) {
+            if (prod.attributes.length > 0) {
+                const specDescription = `${attribute.name}:`
+                const specName = attribute.items[0].value[0] === "#" ? ` ${attribute.items[0].displayValue}` : ` ${attribute.items[0].value}`
+                const indexOfSpecDescription = prod.attributes.findIndex(attr => `${attr.name}:` === specDescription)
+                this.props.setSpecs(specDescription, specName, indexOfSpecDescription)
+                
+            } else { }
+        }
+     this.props.setProductParams(prod.brand, prod.name, priceToDisplay, prod.gallery, prod.id, priceAmount)
+    }
+    
+    
     render() {
         return (
             <Container>
                 {this.props.products.map(prod => {
-                    const prodPrice = this.props.setProductPrice(prod, this.props.currency)
+                    const priceToDisplay = this.props.getProductPriceToDisplay(prod)
                     if (prod.inStock) {
                         return <ProductContainer
-                                    onClick={() => this.getProductInfo(prod.id)} key={prod.id}>
-                                    <Img src={prod.gallery[0]} />
+                            onClick={() => this.getProductInfo(prod.id)}
+                            key={prod.id}>
+                                <Img src={prod.gallery[0]} />
+                                <CartIcon onClick={ () => this.setItemSpecsAndParams(prod) } src={GreenCartIcon} />
                                     <Name>
                                         {prod.name}
                                     </Name>
                                     <Price> 
-                                        {prodPrice[0]}
+                                        {priceToDisplay}
                                     </Price>
-                                    <img onClick={ () => this.props.setProductParams(prod.brand, prod.name, prodPrice[0], prod.gallery, prod.id, prodPrice[1])}src={GreenCartIcon} />
                                 </ProductContainer>
                     } else {
-                        
                         return <ProductContainerOutOfStock key={prod.id} onClick={() => this.getProductInfo(prod.id)}>
                             <Img src={prod.gallery[0]} />
                             <TextOutOfStock>OUT OF STOCK</TextOutOfStock>
@@ -50,7 +61,7 @@ export default class Products extends Component {
                                 {prod.name}
                             </Name>
                             <Price>
-                                {prodPrice[0]}
+                                {priceToDisplay}
                             </Price>
                         </ProductContainerOutOfStock>
                     }
@@ -59,5 +70,4 @@ export default class Products extends Component {
         )
 
     }
-
 }

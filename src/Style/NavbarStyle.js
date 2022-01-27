@@ -15,7 +15,6 @@ export const NavbarDiv = styled.div`
     grid-template-columns: 1fr 1fr 1fr;
     -ms-grid-rows: auto;
     grid-template-rows: auto;
-}
 `;
 
 export const Left = styled.div`
@@ -35,10 +34,14 @@ export const Left = styled.div`
     align-items: center;
 `;
 
-export const Category = styled.span`
+export const Category = styled.div`
     display: -webkit-box;
+    color: ${props => props.activeColor};
     display: -webkit-flex;
     display: -ms-flexbox;
+    fill: solid;
+    font-style: normal;
+    font-weight: 600;
     display: flex;
     margin-right: 24px;
     -webkit-box-orient: horizontal;
@@ -52,27 +55,26 @@ export const Category = styled.span`
     line-height: 19.2px;
     text-transform: uppercase;
     cursor: pointer;
-}
 `;
 
 export const Center = styled.div`
-flex: 1;
-text-align: center;
+    flex: 1;
+    text-align: center;
 `;
 
 export const Right = styled.div`
-display: -webkit-box;
-display: -webkit-flex;
-display: -ms-flexbox;
-display: flex;
--webkit-box-pack: end;
--webkit-justify-content: flex-end;
--ms-flex-pack: end;
-justify-content: flex-end;
--webkit-box-align: center;
--webkit-align-items: center;
--ms-flex-align: center;
-align-items: center;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: end;
+    -webkit-justify-content: flex-end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
 `;
 
 export const Image = styled.img`
@@ -81,17 +83,18 @@ export const Image = styled.img`
     vertical-align: middle;
     display: inline-block;
     cursor: pointer;
+
 `;
 
 export const CurrencySign = styled.p`
-font-family: Raleway;
-font-size: 18px;
-font-style: normal;
-font-weight: 500;
-line-height: 29px;
-letter-spacing: 0em;
-text-align: left;
-cursor: pointer;
+    font-family: Raleway;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: left;
+    cursor: pointer;
 `;
 
 export const ArrowImgUp = styled.img`
@@ -108,10 +111,8 @@ export const ArrowImgDown = styled.img`
 `;
 
 export const Currency = styled.div`
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
+    position: relative;
     margin-right: 24px;
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
@@ -120,4 +121,25 @@ export const Currency = styled.div`
     flex-direction: row;
     font-size: 18px;
     text-transform: uppercase;
+`;
+
+export const CartCounterAndImg = styled.div`
+    position: relative;
+`;
+
+export const Counter = styled.div`
+    position: absolute;
+    left: auto;
+    right: -8px;
+    top: -8px;
+    bottom: auto;
+    display: flex;
+    justify-content: center;
+    color: white;
+    height: 20px;
+    width: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 100%;
+    background-color: #333;
 `;

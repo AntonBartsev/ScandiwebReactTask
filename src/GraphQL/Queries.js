@@ -4,11 +4,20 @@ export const GET_PRODUCTS = gql`
 query {
     categories {
         products {
+             attributes{
+    name
+  items{
+      displayValue,
+      value,
+      id
+    }
+  }
             id,
             name,
             inStock,
             gallery,
             category,
+            brand,
             prices {
                 currency {
                     label,

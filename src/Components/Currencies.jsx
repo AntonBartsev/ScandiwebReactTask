@@ -7,7 +7,7 @@ export default class Currencies extends Component {
           <CurrenciesContainer>
               {this.props.allCurrencies.map(
                 (cur, index) => <Currency
-                      onClick={() => this.props.setCurrency(cur.symbol)}
+                      onClick={() => this.props.setChosenCurrency(cur.symbol)}
                       key={index}>
                       {cur.symbol} {cur.label}
                   </Currency>

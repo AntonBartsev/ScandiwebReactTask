@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { client } from "../App";
-import { gql, throwServerError } from "@apollo/client";
+import { gql } from "@apollo/client";
 import Products from "./Products";
 import ProductScreen from "./ProductScreen";
 import Cart from "./Cart";
 import Bag from "./Bag";
 import Navbar from "./Navbar";
-import Currencies from "./Currencies";
-import { CategoryContainer, CategoryName } from "../Style/ShopStyle";
+import { CategoryContainer, CategoryName, MainPageContainer } from "../Style/ShopStyle";
 import { GET_CURRENCIES, GET_PRODUCTS } from "../GraphQL/Queries";
+import { CartContainer } from "../Style/CartStyle"
 
 
 
@@ -18,11 +18,10 @@ class Shop extends Component {
     state = {
         areCurrenciesOpened: false,
         isCartOpened: false,
-        // chosenCurrency - signalizes chosen currency to determine prices of products
         chosenCurrency: "$",
         allCurrencies: [],
-        categoryName: "All",
-        arrayByCategory: [],
+        chosenCategory: "All",
+        productsByCategory: [],
         componentToRender: "products",
         productInfo: [],
         cartContent: [],
@@ -30,9 +29,9 @@ class Shop extends Component {
         chosenSpecs: []
     }
     
-    setCategoryName = (chosenCategory) => {
+    setChosenCategory = (chosenCategory) => {
         this.setState({
-            categoryName: chosenCategory
+            chosenCategory
         })
         this.updateProductsByCategory(chosenCategory)
         this.setComponentToRender("products", "")
@@ -48,39 +47,34 @@ class Shop extends Component {
             })
     }
     
-    updateTotalPriceOfCart = (productInfo, cartContent, currency) => {
-        const newPrice = this.setProductPrice(productInfo, currency)
+    updateTotalPriceOfCart = () => {
         let totalPriceOfCart = 0
-        for (let cartItem of cartContent) {
-            cartItem.price[1] = newPrice[1].toFixed(0)
+        for (let cartItem of this.state.cartContent) {
             totalPriceOfCart += (cartItem.price[1] * cartItem.itemCounter)
         }
         this.setState({
-            cartContent,
             totalPriceOfCart
         })
     }
     
-    
-    
-    setSpecs = (specDescription, specName) => {
+    setSpecs = (specDescription, specName, specIndex) => {
         const chosenSpecs = this.state.chosenSpecs
         if (chosenSpecs.length > 0) {
             const index = chosenSpecs.findIndex(specObj => specObj.specDescription === specDescription)
             if (index !== -1) {
                     chosenSpecs.splice(index, 1)
-                    chosenSpecs.push({ specDescription, specName })
+                    chosenSpecs.splice(index, 0, { specDescription, specName })
                     this.setState({
                         chosenSpecs
                 })
             } else {
-                    chosenSpecs.push({ specDescription, specName })
+                    chosenSpecs.splice(specIndex, 0, { specDescription, specName })
                     this.setState({
                         chosenSpecs
                 })
                 }
         } else {
-            chosenSpecs.push({ specDescription, specName })
+            chosenSpecs.splice(specIndex, 0, { specDescription, specName })
                 this.setState({
                     chosenSpecs
                 })
@@ -96,10 +90,11 @@ class Shop extends Component {
                 brand,
                 name,
                 price: [price, priceAmount],
+                lastChosenImgIndex: 0,
                 img
             }   
             let index = null
-            if (cartContent.length > 0) {
+            if (cartContent.length > 0 && this.state.chosenSpecs.length > 0) {
                 index = cartContent.findIndex(item => (item.specs.every((spec, i) => spec.specName === this.state.chosenSpecs[i].specName)))
                 if (index !== -1) {
                     this.increaseItemCounter(cartContent[index].price[1], index)
@@ -146,7 +141,8 @@ class Shop extends Component {
 
     setIsCartOpened = () => {
         this.setState({
-            isCartOpened: !this.state.isCartOpened
+            isCartOpened: !this.state.isCartOpened,
+            areCurrenciesOpened: false
         })
     }
     
@@ -159,17 +155,45 @@ class Shop extends Component {
         })
     }
     
+    
+    updateCartPricesByCurrency = (currency) => {
+        let amount = 0
+        for (let cartItem of this.state.cartContent) {
+            const product = this.state.productsByCategory.find(itemInProducts => itemInProducts.id === cartItem.id)    
+            for (let price of product.prices) {
+                if (price.currency.symbol === currency) {
+                    amount = price.amount
+                }
+            } 
+            cartItem.price[0] = currency + amount.toFixed(0)
+            cartItem.price[1] = parseInt(amount.toFixed(0))            
+        }
+        this.setState({
+            cartContent: this.state.cartContent
+        })
+    }
 
     
-    setProductPrice = (product, currency) => {
+    getProductPriceToDisplay = (product) => {
         let amount = 0
         for (let price of product.prices) {
-            if (price.currency.symbol === currency) {
+            if (price.currency.symbol === this.state.chosenCurrency) {
                 amount = price.amount
             }
         }
-        const price = currency + amount.toFixed(0);
-        return [price, amount]
+        const price = this.state.chosenCurrency + amount.toFixed(0);
+        return price
+    }
+    
+    getProductPriceAmount = (product) => {
+        let amount = 0
+        for (let price of product.prices) {
+            if (price.currency.symbol === this.state.chosenCurrency) {
+                amount = price.amount
+            }
+        }
+        const price = amount.toFixed(0);
+        return parseInt(price)
     }
 
 
@@ -177,7 +201,7 @@ class Shop extends Component {
     displayCart = (content, isCartOpened) => {
         if (isCartOpened) {
             if (content.length === 0) {
-                return <div>NO ITEMS FOUND IN CART</div>
+                return <CartContainer>NO ITEMS FOUND IN CART</CartContainer>
             } else {
                 return <Cart
                         cartContent={this.state.cartContent}
@@ -186,8 +210,10 @@ class Shop extends Component {
                         decreaseItemCounter={this.decreaseItemCounter}
                         increaseItemCounter={this.increaseItemCounter}
                         currency={this.state.chosenCurrency}
-                        setProductPrice={this.setProductPrice}
-                        productInfo={this.state.productInfo} />
+                        getProductPriceToDisplay={this.getProductPriceToDisplay}
+                        getProductPriceAmount={this.getProductPriceAmount}
+                        productInfo={this.state.productInfo}/>
+                        
             }
         } else {
             return ""
@@ -198,29 +224,22 @@ class Shop extends Component {
     setAreCurrenciesOpened = () => {
         this.getCurrenciesData()
         this.setState({
-            areCurrenciesOpened: !this.state.areCurrenciesOpened
+            areCurrenciesOpened: !this.state.areCurrenciesOpened,
+            isCartOpened: false
         })
     }
 
 
-
-    displayCurrencies = (areCurrenciesOpened) => {
-        if (areCurrenciesOpened) {
-            return <Currencies
-                setCurrency={this.setChosenCurrency}
-                allCurrencies={this.state.allCurrencies}/>
-        } else {
-            return ''
-        }
-    }
-
     setChosenCurrency = (currency) => {
         if (this.state.cartContent.length > 0) {
-            this.updateTotalPriceOfCart(this.state.productInfo, this.state.cartContent, currency)
+            this.updateCartPricesByCurrency(currency)
+            this.updateTotalPriceOfCart(this.state.cartContent)
+
         }
         this.setState({
             chosenCurrency: currency,
-            areCurrenciesOpened: !this.state.areCurrenciesOpened
+            areCurrenciesOpened: !this.state.areCurrenciesOpened,
+            cartContent: this.state.cartContent
         })
     }
     
@@ -235,10 +254,10 @@ class Shop extends Component {
     
     
     renderMainPageComponent = (componentToRender) => {
-        const {categoryName, arrayByCategory, chosenCurrency, cartContent, productInfo} = this.state
+        const {chosenCategory: categoryName, productsByCategory: arrayByCategory, chosenCurrency, cartContent, productInfo, chosenSpecs} = this.state
         if (componentToRender === "products") {
             return (
-            <>
+            <MainPageContainer>
                 <CategoryContainer>
                     <CategoryName>{categoryName}</CategoryName>
                 </CategoryContainer>
@@ -247,14 +266,17 @@ class Shop extends Component {
                     currency={chosenCurrency}
                     setComponentToRender={this.setComponentToRender}
                     componentToRender={componentToRender}
-                    setProductPrice={this.setProductPrice}
-                    setProductParams={this.setProductParams} />
-            </>)
+                    getProductPriceToDisplay={this.getProductPriceToDisplay}
+                    getProductPriceAmount={this.getProductPriceAmount}
+                    setProductParams={this.setProductParams}
+                    setSpecs={this.setSpecs} />
+            </MainPageContainer>)
         } else if (componentToRender === "bag") {
             return <Bag
                 cartContent={cartContent}
                 productInfo={productInfo}
-                setProductPrice={this.setProductPrice}
+                getProductPriceToDisplay={this.getProductPriceToDisplay}
+                getProductPriceAmount={this.getProductPriceAmount}
                 decreaseItemCounter={this.decreaseItemCounter}
                 increaseItemCounter={this.increaseItemCounter}
                 currency={chosenCurrency} />
@@ -266,10 +288,12 @@ class Shop extends Component {
                     setCartContent={this.addItemToCartContent}
                     cartContent={cartContent}
                     increaseItemCounter={this.increaseItemCounter}
-                    setProductPrice={this.setProductPrice}
+                    getProductPriceToDisplay={this.getProductPriceToDisplay}
+                    getProductPriceAmount={this.getProductPriceAmount}
                     productInfo={productInfo}
                     setSpecs={this.setSpecs}
-                    setProductParams={this.setProductParams}/>)
+                    setProductParams={this.setProductParams}
+                    chosenSpecs={chosenSpecs}                />)
         }
     }
     
@@ -282,11 +306,11 @@ class Shop extends Component {
 
 
     render() {
-        const {componentToRender, chosenCurrency, productInfo, cartContent, isCartOpened, areCurrenciesOpened } = this.state
+        const {componentToRender, chosenCurrency, productInfo, cartContent, isCartOpened, areCurrenciesOpened, allCurrencies, chosenCategory } = this.state
         return (
             <>
                 <Navbar
-                    setCategoryName={this.setCategoryName}
+                    setChosenCategory={this.setChosenCategory}
                     setComponentToRender={this.setComponentToRender}
                     getCurrenciesData={this.getCurrenciesData}
                     setAreCurrenciesOpened={this.setAreCurrenciesOpened}
@@ -294,8 +318,12 @@ class Shop extends Component {
                     currency={chosenCurrency}
                     productInfo={productInfo}
                     areCurrenciesOpened={areCurrenciesOpened}
+                    allCurrencies={allCurrencies}
+                    setChosenCurrency={this.setChosenCurrency}
+                    cartContent={cartContent}
+                    chosenCategory={chosenCategory}
+                    
                 />
-                {this.displayCurrencies(this.state.areCurrenciesOpened)}
                 {this.displayCart(cartContent, isCartOpened)}
                 
                 {this.renderMainPageComponent(componentToRender)} 
