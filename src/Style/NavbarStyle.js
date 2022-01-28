@@ -140,4 +140,5 @@ export const Counter = styled.div`
     font-weight: 600;
     border-radius: 100%;
     background-color: #333;
+    cursor: pointer;
 `;

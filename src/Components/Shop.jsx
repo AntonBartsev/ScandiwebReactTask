@@ -108,37 +108,54 @@ class Shop extends Component {
         }
     }
     
+    
     // Set needed parameters of the product to be added to cart
-    setProductParams = (brand, name, price, img, id, priceAmount) => {
+    setProductParams = (brand, name, priceToDisplay, img, id, priceAmount) => {
         const cartContent = this.state.cartContent
         // Cart item information
         const cartItem = {
             id,
             itemCounter: 1,
-            specs: this.state.chosenSpecs,
+            // Set information if the item has no specs
+            specs: this.state.chosenSpecs.length > 0 ? this.state.chosenSpecs : ["No Specs"],
             brand,
             name,
-            price: [price, priceAmount],
+            price: [priceToDisplay, priceAmount],
             lastChosenImgIndex: 0,
             img
         }   
         let index = null
-        // Check if there are items in cart
-        if (cartContent.length > 0 && this.state.chosenSpecs.length > 0) {
-            // Check cart for duplicates
-            index = cartContent.findIndex(item => (item.specs.every((spec, i) => spec.specName === this.state.chosenSpecs[i].specName)))
-            // If duplicates were found, increase item counter
-            if (index !== -1) {
-                this.increaseItemCounter(cartContent[index].price[1], index)
-            // Otherwise add item to cart as new one 
+        if (cartItem.specs[0] !== "No Specs") {
+            // Check if there are items in cart
+            if (cartContent.length > 0) {
+                // Check cart for duplicates
+                index = cartContent.findIndex(item => (item.specs.every((spec, i) => spec.specName === this.state.chosenSpecs[i].specName)))
+                // If duplicates were found, increase item counter
+                if (index !== -1) {
+                    this.increaseItemCounter(cartContent[index].price[1], index)
+                // Otherwise add item to cart as new one 
+                } else {
+                    cartContent.push(cartItem)
+                    this.addItemToCartContent(cartContent, cartItem)
+                }
+            // If the cart is empty, add new item
             } else {
                 cartContent.push(cartItem)
                 this.addItemToCartContent(cartContent, cartItem)
             }
-        // If the cart is empty, add new item
         } else {
-            cartContent.push(cartItem)
-            this.addItemToCartContent(cartContent, cartItem)
+            if (cartContent.length > 0) {
+                const duplIndx = cartContent.findIndex(item => item.id === id) 
+                if (duplIndx !== -1) {
+                    this.increaseItemCounter(cartContent[duplIndx].price[1], duplIndx)
+                } else {
+                    cartContent.push(cartItem)
+                    this.addItemToCartContent(cartContent, cartItem)
+                }
+            } else {
+                cartContent.push(cartItem)
+                this.addItemToCartContent(cartContent, cartItem)  
+            }   
         }
         // Clear chosen specifications as item was added to cart
         this.setState({
@@ -194,7 +211,8 @@ class Shop extends Component {
         this.setState({
             componentToRender: toRender,
             productInfo: productInfo,
-            isCartOpened: false
+            isCartOpened: false,
+            chosenSpecs: []
         })
     }
     
@@ -314,7 +332,8 @@ class Shop extends Component {
                     getProductPriceAmount={this.getProductPriceAmount}
                     setProductParams={this.setProductParams}
                     setSpecs={this.setSpecs}
-                    setDefaultSpecs={this.setDefaultSpecs}/>
+                    setDefaultSpecs={this.setDefaultSpecs}
+                    />
             </MainPageContainer>)
         } else if (componentToRender === "bag") {
             return <Bag

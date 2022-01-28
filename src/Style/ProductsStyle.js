@@ -16,9 +16,9 @@ export const CartIcon = styled.img`
     position: absolute;
     cursor: pointer;
     left: auto;
-    right: 0;
+    right: 20px;
     z-index: 10;
-    margin-top: -35px;
+    margin-top: -54px;
 `;
 
 export const ProductContainer = styled.div`

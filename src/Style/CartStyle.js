@@ -93,7 +93,6 @@ export const CounterContainer = styled.div`
     justify-content: space-between;
     height: 137px;
     align-items: center;
-    cursor: pointer;
 `;
 
 export const CounterBtn = styled.div`
@@ -105,9 +104,13 @@ export const CounterBtn = styled.div`
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
+    transition-duration: 0.2s;
+    &:hover {
+        background-color: #333;
+        color: white;
+    }
 `;
 
-export const Counter = styled.div`
+export const Counter = styled.p`
     font-weight: 500;
-    cursor: pointer;
 `;

@@ -134,12 +134,12 @@ export const ColoredSpec = styled(Spec)`
     width: 40px;
     height: 40px;
     border-radius: 100%;
-    opacity: 0.2;
+    opacity: 0.64;
 `;
 
 export const ChosenColoredSpec = styled(ColoredSpec)`
-    opacity: 1;
     background: ${props => props.color};
+    opacity: 1;
 `
 
 export const ChosenSpec = styled.div`

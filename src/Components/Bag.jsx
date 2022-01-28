@@ -44,7 +44,8 @@ export default class Bag extends Component {
                             <Brand>{item.brand}</Brand>
                             <Name>{item.name}</Name>
                             <Price>{item.price[0]}</Price>
-                            {item.specs.map(spec => <p key={spec.specDescription}>{spec.specDescription + spec.specName}</p>)}
+                            {item.specs[0] !== "No Specs" ?
+                                item.specs.map(spec => <p key={spec.specDescription}>{spec.specDescription + spec.specName}</p>) : ''}
                         </InfoContainer>
                         <CounterContainer>
                             <CounterBtn onClick={() => this.props.increaseItemCounter(item.price[1], index)}>+</CounterBtn>

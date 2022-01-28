@@ -11,8 +11,8 @@ export default class ProductScreen extends Component {
     getDescription = () => {
         let result = []
         const description = this.props.productInfo.description
-        const parser = new DOMParser();
-        const descriptionAsHTML = parser.parseFromString(description, 'text/html').getElementsByTagName("body");
+        const parser = new DOMParser()
+        const descriptionAsHTML = parser.parseFromString(description, 'text/html').getElementsByTagName("body")
         for (let child of descriptionAsHTML[0].children) {
             result.push(child)
         }
@@ -62,7 +62,7 @@ export default class ProductScreen extends Component {
         // otherwise display available button
         } else {
             return  <AddToCart
-                        onClick={ () => this.props.setProductParams(brand, name, priceToDisplay, gallery, id, priceAmount)}> 
+                onClick={() => this.props.setProductParams(brand, name, priceToDisplay, gallery, id, priceAmount)}> 
                         ADD TO CART
                     </AddToCart>
         }

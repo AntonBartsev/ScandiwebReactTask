@@ -26,6 +26,7 @@ export default class Products extends Component {
         // set default specifications of product when adding product to cart from the main page
         this.props.setDefaultSpecs(prod)
         this.props.setProductParams(prod.brand, prod.name, priceToDisplay, prod.gallery, prod.id, priceAmount)
+
     }
     
     

@@ -3,7 +3,7 @@ import { CartContainer, CartContent, Img, BtnContainer, BagBtn, ProductInfoInCar
 
 // Cart window of the shop
 export default class Cart extends Component {
-  render () {
+  render() {
     return (
         <CartContainer>
             <CartHeader>{`My Bag, ${this.props.cartContent.length} items`} </CartHeader>
@@ -13,7 +13,7 @@ export default class Cart extends Component {
                           <p>{item.brand}</p>
                           <CartSpec>{item.name}</CartSpec>
                           <Price>{item.price[0]}</Price>
-                          {item.specs.map((spec, index) => <SpecsCart key={index}>{spec.specDescription + spec.specName}</SpecsCart>)}
+                          {item.specs[0] !== "No Specs" ? item.specs.map((spec, index) => <SpecsCart key={index}>{spec.specDescription + spec.specName}</SpecsCart>) : ''}
                     </ProductInfoInCart>
                     <CounterContainer>
                         <CounterBtn onClick={() => this.props.increaseItemCounter(item.price[1], index)}>+</CounterBtn>

@@ -97,6 +97,11 @@ export const CounterBtn = styled.div`
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
+    transition-duration: 0.2s;
+    &:hover {
+        background-color: #333;
+        color: white;
+    }
 `;
 
 export const InfoContainer = styled.div`
