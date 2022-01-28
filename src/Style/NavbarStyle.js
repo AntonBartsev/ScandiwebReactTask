@@ -36,12 +36,10 @@ export const Left = styled.div`
 
 export const Category = styled.div`
     display: -webkit-box;
-    color: ${props => props.activeColor};
+    color: ${props => (props.isCategoryActive ? "#5ECE7B" : "#333")};
     display: -webkit-flex;
     display: -ms-flexbox;
     fill: solid;
-    font-style: normal;
-    font-weight: 600;
     display: flex;
     margin-right: 24px;
     -webkit-box-orient: horizontal;
@@ -50,7 +48,7 @@ export const Category = styled.div`
     -ms-flex-direction: row;
     flex-direction: row;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 600;
     font-style: normal;
     line-height: 19.2px;
     text-transform: uppercase;

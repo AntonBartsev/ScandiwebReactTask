@@ -1,20 +1,7 @@
 import React, { Component } from "react";
 import { CartContainer, CartContent, Img, BtnContainer, BagBtn, ProductInfoInCart, CartHeader, CartSpec, Price, SpecsCart, CounterContainer, CounterBtn, Counter, CheckoutBtn } from "../Style/CartStyle";
-  // "eslintConfig": {
-  //   "extends": [
-  //     "react-app",
-  //     "react-app/jest"
-  //   ]
-  // },
 
-    //"lint": "eslint src --ext .js,.jsx"
-
-    // "eslint-config-standard": "^16.0.3",
-    // "eslint-plugin-import": "^2.25.4",
-    // "eslint-plugin-node": "^11.1.0",
-    // "eslint-plugin-promise": "^5.2.0",
-    // "eslint-plugin-react": "^7.28.0"
-
+// Cart window of the shop
 export default class Cart extends Component {
   render () {
     return (
@@ -44,6 +31,6 @@ export default class Cart extends Component {
               </BtnContainer>
 
           </CartContainer>
-    );
+    )
   }
 }

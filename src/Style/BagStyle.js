@@ -35,11 +35,16 @@ export const Img = styled.img`
     object-fit: cover;
 `;
 
-export const ArrowsImg = styled.img`
+export const ArrowsImgLeft = styled.img`
     cursor: pointer;
 `;
 
-export const ImgAndArrows = styled.div`
+export const ArrowsImgRight = styled.img`
+    cursor: pointer;
+    transform: rotate(180deg)
+`;
+
+export const ImgContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;

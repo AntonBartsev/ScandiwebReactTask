@@ -26,6 +26,24 @@ export const AddToCart = styled.div`
     }
 `;
 
+
+export const AddToCartNotAvailable = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(94, 206, 123, 1);
+    opacity: 0.3;
+    height: 52px;
+    width: 292px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 19px;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 40px;
+`;
+
+
 export const Imgs = styled.div`
     display: flex;
     flex-direction: column;
@@ -116,7 +134,13 @@ export const ColoredSpec = styled(Spec)`
     width: 40px;
     height: 40px;
     border-radius: 100%;
+    opacity: 0.2;
 `;
+
+export const ChosenColoredSpec = styled(ColoredSpec)`
+    opacity: 1;
+    background: ${props => props.color};
+`
 
 export const ChosenSpec = styled.div`
     display: flex;

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { CurrenciesContainer, Currency } from "../Style/CurrenciesStyle";
 
+// Currencies available in the shop as window (chosen currency affects prices throughout the shop)
 export default class Currencies extends Component {
   render () {
     return (
@@ -13,6 +14,5 @@ export default class Currencies extends Component {
                   </Currency>
               )}
           </CurrenciesContainer>
-    );
-  }
+    )}
 }

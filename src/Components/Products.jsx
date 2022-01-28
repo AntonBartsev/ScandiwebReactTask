@@ -17,21 +17,15 @@ export default class Products extends Component {
         } else
             return
     }
-    
     // Set item's specifications when adding to cart from the main page
     setItemSpecsAndParams = (prod) => {
+        // get item price to display on page
         const priceToDisplay = this.props.getProductPriceToDisplay(prod)
+        // get item price amount for calculations
         const priceAmount = this.props.getProductPriceAmount(prod)
-        for (let attribute of prod.attributes) {
-            if (prod.attributes.length > 0) {
-                const specDescription = `${attribute.name}:`
-                const specName = attribute.items[0].value[0] === "#" ? ` ${attribute.items[0].displayValue}` : ` ${attribute.items[0].value}`
-                const indexOfSpecDescription = prod.attributes.findIndex(attr => `${attr.name}:` === specDescription)
-                this.props.setSpecs(specDescription, specName, indexOfSpecDescription)
-                
-            } else { }
-        }
-     this.props.setProductParams(prod.brand, prod.name, priceToDisplay, prod.gallery, prod.id, priceAmount)
+        // set default specifications of product when adding product to cart from the main page
+        this.props.setDefaultSpecs(prod)
+        this.props.setProductParams(prod.brand, prod.name, priceToDisplay, prod.gallery, prod.id, priceAmount)
     }
     
     
@@ -42,14 +36,13 @@ export default class Products extends Component {
                     const priceToDisplay = this.props.getProductPriceToDisplay(prod)
                     if (prod.inStock) {
                         return <ProductContainer
-                            onClick={() => this.getProductInfo(prod.id)}
                             key={prod.id}>
-                                <Img src={prod.gallery[0]} />
+                                <Img onClick={() => this.getProductInfo(prod.id)} src={prod.gallery[0]} />
                                 <CartIcon onClick={ () => this.setItemSpecsAndParams(prod) } src={GreenCartIcon} />
-                                    <Name>
+                                    <Name onClick={() => this.getProductInfo(prod.id)}>
                                         {prod.name}
                                     </Name>
-                                    <Price> 
+                                    <Price onClick={() => this.getProductInfo(prod.id)}> 
                                         {priceToDisplay}
                                     </Price>
                                 </ProductContainer>
@@ -67,7 +60,5 @@ export default class Products extends Component {
                     }
                 })}
             </Container>
-        )
-
-    }
+        )}
 }

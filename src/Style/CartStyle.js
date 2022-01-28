@@ -17,6 +17,7 @@ export const CartContainer = styled.div`
 
 export const CartHeader = styled.p`
     font-weight: 700;
+    margin-bottom: 25px;
 `;
 
 export const ProductInfoInCart = styled.div`
@@ -92,6 +93,7 @@ export const CounterContainer = styled.div`
     justify-content: space-between;
     height: 137px;
     align-items: center;
+    cursor: pointer;
 `;
 
 export const CounterBtn = styled.div`
@@ -105,6 +107,7 @@ export const CounterBtn = styled.div`
     cursor: pointer;
 `;
 
-export const Counter = styled.p`
+export const Counter = styled.div`
     font-weight: 500;
+    cursor: pointer;
 `;
