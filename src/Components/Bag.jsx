@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import ImgArrow from "../Images/ImgArrow.svg";
 import { CartHeading, BagContainer, ContentPlacement, Img, ArrowsImgLeft, ArrowsImgRight, ImgContainer, Brand, Name, Price, CounterContainer, CounterBtn, InfoContainer, ArrowsContainer } from "../Style/BagStyle";
 
 // Bag of the shop
-export default class Bag extends Component {
+export default class Bag extends PureComponent {
 
     state = {
         // index of image of certain product in the bag to be displayed
@@ -34,7 +34,8 @@ export default class Bag extends Component {
     }
     
     render() {
-        const cartContent = this.props.cartContent
+        const {cartContent, increaseItemCounter, decreaseItemCounter} = this.props
+        const {indexOfItem, indexOfDisplayedImg} = this.state
         return (
             <BagContainer>
                 <CartHeading>CART</CartHeading>
@@ -48,17 +49,17 @@ export default class Bag extends Component {
                                 item.specs.map(spec => <p key={spec.specDescription}>{spec.specDescription + spec.specName}</p>) : ''}
                         </InfoContainer>
                         <CounterContainer>
-                            <CounterBtn onClick={() => this.props.increaseItemCounter(item.price[1], index)}>+</CounterBtn>
+                            <CounterBtn onClick={() => increaseItemCounter(item.price[1], index)}>+</CounterBtn>
                             <p>{item.itemCounter}</p>
-                            <CounterBtn onClick={() => this.props.decreaseItemCounter(item.price[1], index)}>-</CounterBtn>
+                            <CounterBtn onClick={() => decreaseItemCounter(item.price[1], index)}>-</CounterBtn>
                         </CounterContainer>
                         {item.img.length > 1
                             ?
                             <ImgContainer>
                                 <Img
                                     src={item.img
-                                    [this.state.indexOfItem === index
-                                            ? this.state.indexOfDisplayedImg : item.lastChosenImgIndex]} />
+                                    [indexOfItem === index
+                                            ? indexOfDisplayedImg : item.lastChosenImgIndex]} />
                                 <ArrowsContainer>
                                     <ArrowsImgLeft onClick={() => this.arrowsOnclick("left", item)} src={ImgArrow} />
                                     <ArrowsImgRight onClick={() => this.arrowsOnclick("right", item)} src={ImgArrow} />                               

@@ -58,8 +58,8 @@ export const SubImg = styled.img`
 `;
 
 export const MainImg = styled.img`
-    width: 65%;
-    height: 700px;
+    width: 40%;
+    height: 500px;
     object-fit: cover;
 `;
 

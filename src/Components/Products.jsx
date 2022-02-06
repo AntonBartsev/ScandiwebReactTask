@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Container, ProductContainer, ProductContainerOutOfStock, Name, Price, Img, TextOutOfStock, CartIcon } from "../Style/ProductsStyle";
 import GreenCartIcon from "../Images/GreenCartIcon.svg";
 import { productInfoRequest } from "../GraphQL/Queries";
@@ -6,7 +6,7 @@ import { client } from "../App";
 import { gql } from "@apollo/client";
 
 // Main page with products
-export default class Products extends Component {
+export default class Products extends PureComponent {
     // Get products information by product's id
     getProductInfo = (id) => {
         if (id !== "") {
@@ -17,29 +17,19 @@ export default class Products extends Component {
         } else
             return
     }
-    // Set item's specifications when adding to cart from the main page
-    setItemSpecsAndParams = (prod) => {
-        // get item price to display on page
-        const priceToDisplay = this.props.getProductPriceToDisplay(prod)
-        // get item price amount for calculations
-        const priceAmount = this.props.getProductPriceAmount(prod)
-        // set default specifications of product when adding product to cart from the main page
-        this.props.setDefaultSpecs(prod)
-        this.props.setProductParams(prod.brand, prod.name, priceToDisplay, prod.gallery, prod.id, priceAmount)
-
-    }
     
     
-    render() {
+    render() {  
+        const {products, getProductPriceToDisplay, addItemWithDefaultSpecs} = this.props
         return (
             <Container>
-                {this.props.products.map(prod => {
-                    const priceToDisplay = this.props.getProductPriceToDisplay(prod)
+                {products.map(prod => {
+                    const priceToDisplay = getProductPriceToDisplay(prod)
                     if (prod.inStock) {
                         return <ProductContainer
                             key={prod.id}>
                                 <Img onClick={() => this.getProductInfo(prod.id)} src={prod.gallery[0]} />
-                                <CartIcon onClick={ () => this.setItemSpecsAndParams(prod) } src={GreenCartIcon} />
+                                <CartIcon onClick={() => addItemWithDefaultSpecs(prod)} src={GreenCartIcon} />
                                     <Name onClick={() => this.getProductInfo(prod.id)}>
                                         {prod.name}
                                     </Name>

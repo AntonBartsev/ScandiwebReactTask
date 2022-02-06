@@ -49,6 +49,11 @@ export const BagBtn = styled.div`
     height: 43px;
     width: 150px;
     cursor: pointer;
+    transition-duration: 0.2s;
+    &:hover {
+        background-color: #333;
+        color: white;
+    }
 `;
 
 export const CheckoutBtn = styled.div`
@@ -67,7 +72,7 @@ export const CheckoutBtn = styled.div`
     &:hover {
         background-color: rgb(42 139 67);
     }
-`;
+`; 
 
 export const BtnContainer = styled.div`
     display: flex;

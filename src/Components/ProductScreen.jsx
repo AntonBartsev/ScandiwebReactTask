@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Container, AddToCart, Imgs, MainImg, Specs, Spec, ChosenSpec, ColoredSpec, Brand, Name, SubName, Price, OrderContainer, SubImg, ProductDescription, ChosenColoredSpec, AddToCartNotAvailable } from "../Style/ProductScreen";
 
 // Personal screen for each product
-export default class ProductScreen extends Component {
+export default class ProductScreen extends PureComponent {
     state = {
         chosenImage: 0
     }
@@ -29,25 +29,25 @@ export default class ProductScreen extends Component {
     
     // display specifications of the product
     displaySpecs = (item, attribute, attrIndex) => {
-        const specs = this.props.chosenSpecs
+        const {chosenSpecs, setSpecs} = this.props
         // check what specification was chosen
-        const itemInSpecs = specs.findIndex(spec => spec.specName === ` ${item.value}` && spec.specDescription === `${attribute.name}:`
-            || spec.specName === ` ${item.displayValue}` && spec.specDescription === `${attribute.name}:`)
+        const itemInSpecs = chosenSpecs.findIndex(spec => (spec.specName === ` ${item.value}` && spec.specDescription === `${attribute.name}:`)
+            || (spec.specName === ` ${item.displayValue}` && spec.specDescription === `${attribute.name}:`))
         // if certain specification was chosen, display specification with appropriate style 
         if (itemInSpecs !== -1) {
             if (item.value[0] === "#") {
-                return <ChosenColoredSpec color={item.value} onClick={() => this.props.setSpecs(`${attribute.name}:`, ` ${item.value}`, attrIndex)} key={item.value}/>
+                return <ChosenColoredSpec color={item.value} onClick={() => setSpecs(`${attribute.name}:`, ` ${item.value}`, attrIndex)} key={item.value}/>
             } else {
-                return <ChosenSpec onClick={() => this.props.setSpecs(`${attribute.name}:`, ` ${item.value}`, attrIndex)} key={item.value}>{item.value}</ChosenSpec>
+                return <ChosenSpec onClick={() => setSpecs(`${attribute.name}:`, ` ${item.value}`, attrIndex)} key={item.value}>{item.value}</ChosenSpec>
             }
         // otherwise use style for inactive specifications
         } else {
             if (item.value[0] === "#") {
                 return <ColoredSpec
                     color={item.value}
-                    onClick={() => this.props.setSpecs(`${attribute.name}:`, ` ${item.displayValue}`, attrIndex)} key={item.value} />           
+                    onClick={() => setSpecs(`${attribute.name}:`, ` ${item.displayValue}`, attrIndex)} key={item.value} />           
             } else {
-                return  <Spec onClick={() => this.props.setSpecs(`${attribute.name}:`, ` ${item.value}`, attrIndex)} key={item.value}>
+                return  <Spec onClick={() => setSpecs(`${attribute.name}:`, ` ${item.value}`, attrIndex)} key={item.value}>
                             {item.value}
                         </Spec>
                 }
@@ -55,14 +55,14 @@ export default class ProductScreen extends Component {
     }
     // display "Add to Cart" button
     displayAddToCartButton = (brand, name, priceToDisplay, gallery, id, priceAmount) => {
-        const product = this.props.productInfo
+        const {productInfo, chosenSpecs, setProductParams} = this.props
         // if not all specifications were chosen, display unavailable button
-        if (product.attributes.length > this.props.chosenSpecs.length) {
+        if (productInfo.attributes.length > chosenSpecs.length) {
             return <AddToCartNotAvailable>ADD TO CART</AddToCartNotAvailable>
         // otherwise display available button
         } else {
             return  <AddToCart
-                onClick={() => this.props.setProductParams(brand, name, priceToDisplay, gallery, id, priceAmount)}> 
+                onClick={() => setProductParams(brand, name, priceToDisplay, gallery, id, priceAmount, chosenSpecs)}> 
                         ADD TO CART
                     </AddToCart>
         }
@@ -70,10 +70,10 @@ export default class ProductScreen extends Component {
     
     
     render() {
-        const product = this.props.productInfo
-        const priceToDisplay = this.props.getProductPriceToDisplay(product)
-        const priceAmount = this.props.getProductPriceAmount(product)
-        const { gallery, brand, name, attributes, inStock, id } = product
+        const {productInfo, getProductPriceToDisplay, getProductPriceAmount} = this.props
+        const priceToDisplay = getProductPriceToDisplay(productInfo)
+        const priceAmount = getProductPriceAmount(productInfo)
+        const { gallery, brand, name, attributes, inStock, id } = productInfo
         const description = this.getDescription()
         return (
             <Container>
