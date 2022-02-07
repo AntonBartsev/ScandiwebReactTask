@@ -4,13 +4,12 @@ import { CartHeading, BagContainer, ContentPlacement, Img, ArrowsImgLeft, Arrows
 
 // Bag of the shop
 export default class Bag extends PureComponent {
-
     state = {
-        // index of image of certain product in the bag to be displayed
-        indexOfDisplayedImg: 0,
-        // index of the product which image is to be changed
-        indexOfItem: null
-    }
+      // index of image of certain product in the bag to be displayed
+      indexOfDisplayedImg: 0,
+      // index of the product which image is to be changed
+      indexOfItem: null
+   }
     
     
     // function handles image change
@@ -46,7 +45,7 @@ export default class Bag extends PureComponent {
                             <Name>{item.name}</Name>
                             <Price>{item.price[0]}</Price>
                             {item.specs[0] !== "No Specs" ?
-                                item.specs.map(spec => <p key={spec.specDescription}>{spec.specDescription + spec.specName}</p>) : ''}
+                                item.specs.map(({specDescription, specName}) => <p key={specDescription}>{specDescription + specName}</p>) : ''}
                         </InfoContainer>
                         <CounterContainer>
                             <CounterBtn onClick={() => increaseItemCounter(item.price[1], index)}>+</CounterBtn>

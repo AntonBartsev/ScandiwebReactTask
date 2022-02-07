@@ -18,7 +18,6 @@ export default class Products extends PureComponent {
             return
     }
     
-    
     render() {  
         const {products, getProductPriceToDisplay, addItemWithDefaultSpecs} = this.props
         return (

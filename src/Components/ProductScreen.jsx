@@ -28,27 +28,27 @@ export default class ProductScreen extends PureComponent {
     }
     
     // display specifications of the product
-    displaySpecs = (item, attribute, attrIndex) => {
+    displaySpecs = ({value, displayValue = {}}, attribute, attrIndex) => {
         const {chosenSpecs, setSpecs} = this.props
         // check what specification was chosen
-        const itemInSpecs = chosenSpecs.findIndex(spec => (spec.specName === ` ${item.value}` && spec.specDescription === `${attribute.name}:`)
-            || (spec.specName === ` ${item.displayValue}` && spec.specDescription === `${attribute.name}:`))
+        const itemInSpecs = chosenSpecs.findIndex(({specName, specDescription}) => (specName === ` ${value}` && specDescription === `${attribute.name}:`)
+            || (specName === ` ${displayValue}` && specDescription === `${attribute.name}:`))
         // if certain specification was chosen, display specification with appropriate style 
         if (itemInSpecs !== -1) {
-            if (item.value[0] === "#") {
-                return <ChosenColoredSpec color={item.value} onClick={() => setSpecs(`${attribute.name}:`, ` ${item.value}`, attrIndex)} key={item.value}/>
+            if (value[0] === "#") {
+                return <ChosenColoredSpec color={value} onClick={() => setSpecs(`${attribute.name}:`, ` ${value}`, attrIndex)} key={value}/>
             } else {
-                return <ChosenSpec onClick={() => setSpecs(`${attribute.name}:`, ` ${item.value}`, attrIndex)} key={item.value}>{item.value}</ChosenSpec>
+                return <ChosenSpec onClick={() => setSpecs(`${attribute.name}:`, ` ${value}`, attrIndex)} key={value}>{value}</ChosenSpec>
             }
         // otherwise use style for inactive specifications
         } else {
-            if (item.value[0] === "#") {
+            if (value[0] === "#") {
                 return <ColoredSpec
-                    color={item.value}
-                    onClick={() => setSpecs(`${attribute.name}:`, ` ${item.displayValue}`, attrIndex)} key={item.value} />           
+                    color={value}
+                    onClick={() => setSpecs(`${attribute.name}:`, ` ${displayValue}`, attrIndex)} key={value} />           
             } else {
-                return  <Spec onClick={() => setSpecs(`${attribute.name}:`, ` ${item.value}`, attrIndex)} key={item.value}>
-                            {item.value}
+                return  <Spec onClick={() => setSpecs(`${attribute.name}:`, ` ${value}`, attrIndex)} key={value}>
+                            {value}
                         </Spec>
                 }
             }

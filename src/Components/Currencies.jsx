@@ -17,3 +17,5 @@ export default class Currencies extends PureComponent {
           </CurrenciesContainer>
     )}
 }
+
+

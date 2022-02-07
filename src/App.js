@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Container } from "./Style/AppStyle";
 import Shop from "./Components/Shop";
 
@@ -32,7 +32,7 @@ export const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-class App extends Component {
+class App extends PureComponent {
   render () {
     return (
       <ApolloProvider client={client}>
