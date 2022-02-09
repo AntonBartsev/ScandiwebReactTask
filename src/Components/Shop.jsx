@@ -44,7 +44,7 @@ class Shop extends PureComponent {
             chosenCategory
         })
         this.updateProductsByCategory(chosenCategory)
-        this.setComponentToRender("products", "")
+        this.setComponentToRender("products", {})
     }
     // Update products determined by current category
     updateProductsByCategory(chosenCategory) {
