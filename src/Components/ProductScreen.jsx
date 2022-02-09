@@ -1,10 +1,20 @@
 import React, { PureComponent } from "react";
 import { Container, AddToCart, Imgs, MainImg, Specs, Spec, ChosenSpec, ColoredSpec, Brand, Name, SubName, Price, OrderContainer, SubImg, ProductDescription, ChosenColoredSpec, AddToCartNotAvailable } from "../Style/ProductScreen";
+import PropTypes from "prop-types";
 
 // Personal screen for each product
 export default class ProductScreen extends PureComponent {
     state = {
         chosenImage: 0
+    }
+
+    static propTypes = {
+        productInfo: PropTypes.object,
+        chosenSpecs: PropTypes.array,
+        setSpecs: PropTypes.func,
+        getProductPriceAmount: PropTypes.func,
+        setProductParams: PropTypes.func,
+        getProductPriceToDisplay: PropTypes.func
     }
 
     // get item's description

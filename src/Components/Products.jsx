@@ -4,9 +4,19 @@ import GreenCartIcon from "../Images/GreenCartIcon.svg";
 import { productInfoRequest } from "../GraphQL/Queries";
 import { client } from "../App";
 import { gql } from "@apollo/client";
+import PropTypes from "prop-types";
+import { object } from "prop-types";
 
 // Main page with products
 export default class Products extends PureComponent {
+
+    static propTypes = {
+        setComponentToRender: PropTypes.func,
+        products: PropTypes.array,
+        getProductPriceToDisplay: PropTypes.func,
+        addItemWithDefaultSpecs: PropTypes.func
+    }
+
     // Get products information by product's id
     getProductInfo = (id) => {
         if (id !== "") {

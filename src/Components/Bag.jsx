@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import ImgArrow from "../Images/ImgArrow.svg";
+import PropTypes from "prop-types";
 import { CartHeading, BagContainer, ContentPlacement, Img, ArrowsImgLeft, ArrowsImgRight, ImgContainer, Brand, Name, Price, CounterContainer, CounterBtn, InfoContainer, ArrowsContainer } from "../Style/BagStyle";
 
 // Bag of the shop
@@ -11,6 +12,11 @@ export default class Bag extends PureComponent {
       indexOfItem: null
    }
     
+   static propTypes = {
+    cartContent: PropTypes.array,
+    increaseItemCounter: PropTypes.func,
+    decreaseItemCounter: PropTypes.func
+   }
     
     // function handles image change
     arrowsOnclick = (direction, item) => {

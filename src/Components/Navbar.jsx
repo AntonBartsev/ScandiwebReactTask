@@ -4,9 +4,25 @@ import brandIcon from "../Images/BrandIcon.svg";
 import arrowImg from "../Images/ArrowCurrImg.svg";
 import { NavbarDiv, Left, Center, Right, Category, Image, CurrencySign, ArrowImgUp, ArrowImgDown, Currency, CartCounterAndImg, Counter} from "../Style/NavbarStyle";
 import Currencies from "./Currencies";
+import PropTypes from "prop-types";
 
 // Navigational bar of the shop
 export default class Navbar extends PureComponent {
+
+    static propTypes = {
+        allCurrencies: PropTypes.array,
+        setChosenCurrency: PropTypes.func,
+        chosenCategory: PropTypes.string,
+        setChosenCategory: PropTypes.func,
+        setComponentToRender: PropTypes.func,
+        productInfo: PropTypes.object,
+        setAreCurrenciesOpened: PropTypes.func,
+        currency: PropTypes.string,
+        areCurrenciesOpened: PropTypes.bool,
+        setIsCartOpened: PropTypes.func,
+        cartContent: PropTypes.array
+    }
+
     // display currencies window
     displayCurrencies = (areCurrenciesOpened) => {
         const {allCurrencies, setChosenCurrency} = this.props

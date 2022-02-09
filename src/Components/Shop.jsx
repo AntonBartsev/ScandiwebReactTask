@@ -30,7 +30,7 @@ class Shop extends PureComponent {
         // Indicates which screen should be shown to user
         componentToRender: "products",
         // Information about the product which product screen is to be shown
-        productInfo: [],
+        productInfo: {},
         // Content of the cart
         cartContent: [],
         // Total price of all the cart items
@@ -176,14 +176,14 @@ class Shop extends PureComponent {
     
     // Decrease item counter 
     decreaseItemCounter = (priceToAdjust, indexOfItemToRemove) => {
-        const {componentToRender, totalPriceOfCart} = this.state
+        const {componentToRender, totalPriceOfCart, productInfo} = this.state
         const cartContent = [...this.state.cartContent]
         cartContent[indexOfItemToRemove].itemCounter -= 1
         if (cartContent[indexOfItemToRemove].itemCounter === 0) {
             cartContent.splice(indexOfItemToRemove, 1)
             // If there's no items in the bag, return user to the main paige
             if (componentToRender === "bag" && cartContent.length === 0) {
-                this.setComponentToRender("products", this.props.productInfo)
+                this.setComponentToRender("products", productInfo)
             }   
         }
         this.setState({

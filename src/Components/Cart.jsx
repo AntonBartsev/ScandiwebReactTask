@@ -1,8 +1,21 @@
 import React, { PureComponent } from "react";
-import { CartContainer, CartContent, Img, BtnContainer, BagBtn, ProductInfoInCart, CartHeader, CartSpec, Price, SpecsCart, CounterContainer, CounterBtn, Counter, CheckoutBtn } from "../Style/CartStyle";
+import { CartContainer, CartContent, Img, BtnContainer, BagBtn, ProductInfoInCart, CartHeader, 
+  CartSpec, Price, SpecsCart, CounterContainer, CounterBtn, Counter, CheckoutBtn } from "../Style/CartStyle";
+import PropTypes from "prop-types";
 
 // Cart window of the shop
 export default class Cart extends PureComponent {
+
+  static propTypes = {
+    cartContent: PropTypes.array,
+    increaseItemCounter: PropTypes.func,
+    decreaseItemCounter: PropTypes.func,
+    currency: PropTypes.string,
+    totalPriceOfCart: PropTypes.number,
+    setComponentToRender: PropTypes.func,
+    productInfo: PropTypes.object
+  }
+
   render() {
     const {cartContent, increaseItemCounter, decreaseItemCounter, currency, totalPriceOfCart, setComponentToRender, productInfo} = this.props
     return (
